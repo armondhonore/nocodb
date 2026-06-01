@@ -162,7 +162,7 @@ export function useData(args: {
 
       // Track dirty rows for field agents that depend on this column
       if (id) {
-        onFieldAgentCellUpdate(property, String(id))
+        onFieldAgentCellUpdate(property, String(id), meta.value?.id)
       }
 
       /** update row data(to sync formula and other related columns)
@@ -277,7 +277,7 @@ export function useData(args: {
       const pk = extractPkFromRow(row.row, metaValue?.columns as ColumnType[])
       if (pk) {
         for (const prop of props) {
-          onFieldAgentCellUpdate(prop, String(pk))
+          onFieldAgentCellUpdate(prop, String(pk), meta.value?.id)
         }
       }
     }
