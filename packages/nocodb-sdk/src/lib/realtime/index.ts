@@ -273,14 +273,23 @@ export type FocusValue = {
   editing?: boolean;
 } | null;
 
+/**
+ * Identity of the connection broadcasting a focus. Name/email are carried so a
+ * receiver can render the collaborator's avatar (colour + initials) without
+ * depending on the separate base-presence list, which may not yet have them.
+ */
+export interface FocusUser {
+  id: string;
+  email?: string;
+  display_name?: string;
+}
+
 /** Server→client: a single connection's focus changed. */
 export interface FocusUpdatePayload extends BaseSocketPayload {
   action: 'focus';
   /** Per-connection id (socket id) — distinct from user id. */
   presenceId: string;
-  user: {
-    id: string;
-  };
+  user: FocusUser;
   focus: FocusValue;
 }
 
@@ -288,9 +297,7 @@ export interface FocusUpdatePayload extends BaseSocketPayload {
 export interface FocusLeavePayload extends BaseSocketPayload {
   action: 'focus-leave';
   presenceId: string;
-  user: {
-    id: string;
-  };
+  user: FocusUser;
 }
 
 /** Server→client: bootstrap snapshot of all current focuses, sent on subscribe. */
@@ -298,9 +305,7 @@ export interface FocusBatchPayload extends BaseSocketPayload {
   action: 'focus-batch';
   focuses: Array<{
     presenceId: string;
-    user: {
-      id: string;
-    };
+    user: FocusUser;
     focus: FocusValue;
   }>;
 }

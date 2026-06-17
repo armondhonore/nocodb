@@ -1611,7 +1611,7 @@ export function useCanvasRender({
       const isEditing = box.focuses.some((f) => f.editing)
 
       if (isEditing) {
-        ctx.globalAlpha = 0.08
+        ctx.globalAlpha = 0.1
         ctx.fillStyle = color
         ctx.fillRect(box.x, box.y, box.width, box.height)
         ctx.globalAlpha = 1
@@ -1622,17 +1622,27 @@ export function useCanvasRender({
         borderWidth: 2,
       })
 
+      // Collaborator avatar badge (top-right) — a coloured circle with white
+      // initials, matching the topbar presence avatars so the remote user is
+      // identifiable. The white ring keeps it legible on both light and dark
+      // cell backgrounds.
       const label = box.focuses.length > 1 ? `+${box.focuses.length}` : primary.label
-      ctx.font = '600 10px Inter, sans-serif'
-      const tagH = 14
-      const tagW = Math.ceil(ctx.measureText(label).width) + 8
-      const tagX = box.x + box.width - tagW - 1
-      const tagY = box.y + 1
-      roundedRect(ctx, tagX, tagY, tagW, tagH, { bottomLeft: 4 }, { backgroundColor: color })
-      ctx.fillStyle = '#ffffff'
+      const radius = 9
+      const cx = box.x + box.width - radius - 1
+      const cy = box.y + radius + 1
+      ctx.beginPath()
+      ctx.arc(cx, cy, radius, 0, Math.PI * 2)
+      ctx.fillStyle = color
+      ctx.fill()
+      ctx.lineWidth = 1.5
+      ctx.strokeStyle = '#ffffff'
+      ctx.stroke()
+      ctx.font = '600 9px Inter, sans-serif'
+      // Match UserIcon / user-cell chips: white initials on dark fills, dark on light.
+      ctx.fillStyle = isColorDark(color) ? '#ffffff' : '#000000'
       ctx.textBaseline = 'middle'
       ctx.textAlign = 'center'
-      ctx.fillText(label, tagX + tagW / 2, tagY + tagH / 2 + 0.5)
+      ctx.fillText(label, cx, cy + 0.5)
     }
     ctx.restore()
   }
