@@ -1,14 +1,14 @@
 application:
   name: nocodb
   pods:
-    - name: app
-      image: nocodb/nocodb:latest
-      path: /
-      servicePorts:
-        - 8080
-      vars:
-        NC_DB: "sqlite3:/usr/app/data/?database=noco.db"
-      volumes:
-        - name: data
-          mountPath: /usr/app/data
-          size: 5Gi
+  - name: app
+    image: nocodb/nocodb:latest
+    path: /
+    servicePorts:
+    - 8080
+    vars:
+      NC_DB: "sqlite3:/usr/app/data/?database=noco.db"
+    volumes:
+    - name: nocodb-data
+      mountPath: /usr/app/data
+      size: 5Gi
