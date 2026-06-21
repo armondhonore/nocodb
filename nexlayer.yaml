@@ -2,7 +2,7 @@ application:
   name: nocodb
   pods:
     - name: app
-      image: nocodb/nocodb:latest
+      image: "mirror.gcr.io/nocodb/nocodb:latest"
       path: /
       servicePorts:
         - 8080
